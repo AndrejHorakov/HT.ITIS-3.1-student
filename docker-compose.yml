@@ -7,11 +7,11 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin1234
+      POSTGRES_PASSWORD: 1111
       POSTGRES_DB: DefaultDB
     
   dotnet_main:
-    image: 71a69e962aeae770429e76b9e847c3a44846b071ecbba72f520c967341777c7b
+    image: dotnet-web
     container_name: dotnet_main
     build:
       context: .
