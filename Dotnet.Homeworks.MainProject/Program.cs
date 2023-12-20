@@ -1,16 +1,15 @@
-using Dotnet.Homeworks.Data.DatabaseContext;
-using Dotnet.Homeworks.MainProject.Services;
+using Dotnet.Homeworks.MainProject.ServicesExtensions.CustomServices;
+using Dotnet.Homeworks.MainProject.ServicesExtensions.DatabaseMigrations;
+using Dotnet.Homeworks.MainProject.ServicesExtensions.Masstransit;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
+builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddCustomServicesExtension(builder.Configuration);
 
-builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
-builder.Services.AddSingleton<ICommunicationService, CommunicationService>();
+builder.Services.AddMasstransitRabbitMq(builder.Configuration);
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie();
@@ -23,6 +22,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
 }
 
 app.MapGet("/", () => "Hello World!");
