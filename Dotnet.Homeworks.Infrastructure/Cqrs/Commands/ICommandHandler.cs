@@ -1,5 +1,6 @@
+using Dotnet.Homeworks.Mediator;
 using Dotnet.Homeworks.Shared.Dto;
-using MediatR;
+
 
 namespace Dotnet.Homeworks.Infrastructure.Cqrs.Commands;
 

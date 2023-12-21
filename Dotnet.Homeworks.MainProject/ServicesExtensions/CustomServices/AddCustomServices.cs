@@ -18,7 +18,10 @@ public static class AddCustomServices
         services.AddSingleton<IRegistrationService, RegistrationService>();
         services.AddSingleton<ICommunicationService, CommunicationService>();
         services.AddMediatR(cfg =>
-            cfg.RegisterServicesFromAssembly(Dotnet.Homeworks.Features.Helpers.AssemblyReference.Assembly));
+            cfg.RegisterServicesFromAssembly(Features.Helpers.AssemblyReference.Assembly));
+
+        services.AddHttpContextAccessor();
+        services.AddCqrsValidation();
         
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
