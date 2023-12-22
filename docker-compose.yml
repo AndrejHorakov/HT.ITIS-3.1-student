@@ -57,14 +57,36 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-#  dotnet_minio:
-#    image: minio/minio:latest
-#
+  dotnet_minio:
+    image: minio/minio:latest
+    hostname: minio
+    command: server --console-address ":9001" /data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: user
+      MINIO_ROOT_PASSWORD: pa55word!
+
+  dotnet_storage:
+    image: dotnet-web
+    container_name: dotnet_storage
+    build:
+      context: .
+      dockerfile: Dotnet.Homeworks.Storage.API/Dockerfile
+    ports:
+      - "7002:80"
+    environment:
+      MinioConfig__Password: pa55word!
+      MinioConfig__Username: user
+      MinioConfig__Endpoint: minio
+      MinioConfig__Port: 9000
+      MinioConfig__WithSsl: false
+    depends_on:
+      - dotnet_minio
+    
 #  dotnet_mongodb:
 #    image: mongo:latest
 #
 #  dotnet_jaeger:
 #    image: jaegertracing/all-in-one:latest
-#    
-#  dotnet_storage:
-#    image: dotnet-web
